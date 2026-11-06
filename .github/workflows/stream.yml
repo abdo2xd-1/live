@@ -16,6 +16,12 @@ jobs:
       - name: Download Video
         run: wget -O video.mp4 "https://github.com/abdo2xd-1/live/releases/download/%D8%A7%D9%84%D9%83%D9%87%D9%81/video.mp4"
         
-      - name: Start Streaming
+      - name: Start Streaming for 5 Hours
         run: |
-          ffmpeg -re -stream_loop -1 -i "video.mp4" -c:v libx264 -preset veryfast -b:v 2500k -maxrate 2500k -bufsize 5000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmp://a.rtmp.youtube.com/live2/${{ secrets.YOUTUBE_STREAM_KEY }}"
+          timeout 5h ffmpeg -re -stream_loop -1 -i "video.mp4" -c:v libx264 -preset veryfast -b:v 2500k -maxrate 2500k -bufsize 5000k -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ar 44100 -f flv "rtmp://a.rtmp.youtube.com/live2/${{ secrets.YOUTUBE_STREAM_KEY }}" || true
+          
+      - name: Restart Workflow Automatically
+        env:
+          GH_TOKEN: ${{ secrets.MY_GH_PAT }}
+        run: |
+          gh workflow run "Manual 6-Hour YouTube Stream" --ref main
