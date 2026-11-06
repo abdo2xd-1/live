@@ -1,7 +1,7 @@
 name: Manual 6-Hour YouTube Stream
 
 on:
-  workflow_dispatch: # الأمر ده هو اللي بيعمل زرار التشغيل اليدوي
+  workflow_dispatch:
 
 jobs:
   live-stream:
@@ -12,6 +12,9 @@ jobs:
         
       - name: Install FFmpeg
         run: sudo apt update && sudo apt install ffmpeg -y
+        
+      - name: Download Video
+        run: wget -O video.mp4 "https://github.com/abdo2xd-1/live/releases/download/%D8%A7%D9%84%D9%83%D9%87%D9%81/video.mp4"
         
       - name: Start Streaming
         run: |
